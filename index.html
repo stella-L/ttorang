@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#c1372b" />
+  <title>또랑또랑 · 판소리 연습장</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="또랑또랑" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== 목록 화면 ===== -->
+  <section id="library-view" class="view active">
+    <header class="app-header">
+      <h1 class="logo">또랑또랑</h1>
+      <p class="tagline">선생님 소리, 그대로 숙지</p>
+    </header>
+
+    <div class="library-actions">
+      <button id="import-btn" class="btn-primary">＋ 녹음 파일 불러오기</button>
+      <input type="file" id="file-input" accept="audio/*,video/*,.qta,.m4a,.mov,.caf" hidden />
+    </div>
+
+    <ul id="track-list" class="track-list"></ul>
+
+    <div id="empty-state" class="empty-state">
+      <div class="empty-icon">🥁</div>
+      <p>아직 불러온 소리가 없어요.<br />수업 녹음 파일을 불러와 시작해보세요.</p>
+    </div>
+  </section>
+
+  <!-- ===== 연습 화면 ===== -->
+  <section id="player-view" class="view">
+    <header class="player-header">
+      <button id="back-btn" class="icon-btn" aria-label="목록으로">‹ 목록</button>
+      <input id="track-title" class="track-title" aria-label="제목" />
+      <button id="delete-btn" class="icon-btn danger" aria-label="삭제">🗑</button>
+    </header>
+
+    <!-- 재생 컨트롤 -->
+    <div class="player-panel">
+      <input type="range" id="seek" class="seek" min="0" max="100" value="0" step="0.1" />
+      <div class="time-row">
+        <span id="cur-time">0:00</span>
+        <span id="dur-time">0:00</span>
+      </div>
+
+      <div class="transport">
+        <button id="back5" class="round-btn" aria-label="5초 뒤로">−5s</button>
+        <button id="play-btn" class="round-btn big" aria-label="재생/일시정지">▶</button>
+        <button id="fwd5" class="round-btn" aria-label="5초 앞으로">+5s</button>
+      </div>
+
+      <!-- 배속 -->
+      <div class="speed-row">
+        <span class="row-label">배속</span>
+        <div class="speed-buttons" id="speed-buttons">
+          <button data-rate="0.5">0.5×</button>
+          <button data-rate="0.75">0.75×</button>
+          <button data-rate="1" class="active">1×</button>
+          <button data-rate="1.25">1.25×</button>
+          <button data-rate="1.5">1.5×</button>
+        </div>
+      </div>
+
+      <!-- A-B 구간 반복 -->
+      <div class="ab-row">
+        <span class="row-label">구간 반복</span>
+        <div class="ab-buttons">
+          <button id="set-a" class="ab-btn">A 지점 <em id="a-time">–</em></button>
+          <button id="set-b" class="ab-btn">B 지점 <em id="b-time">–</em></button>
+          <button id="ab-toggle" class="ab-btn toggle">🔁 반복</button>
+          <button id="ab-clear" class="ab-btn ghost">해제</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 가사(사설) -->
+    <div class="section">
+      <div class="section-head">
+        <h2>사설</h2>
+        <div class="section-tools" id="lyrics-tools" hidden>
+          <button id="sync-btn" class="mini-btn">🎯 싱크</button>
+          <button id="edit-lyrics-btn" class="mini-btn ghost">수정</button>
+        </div>
+      </div>
+
+      <!-- 사설 입력 -->
+      <div id="lyrics-editor" class="lyrics-editor">
+        <textarea id="lyrics-input" placeholder="사설을 한 줄(구절)씩 붙여넣어 주세요.&#10;예)&#10;쑥대머리 귀신형용&#10;적막옥방의 찬 자리여&#10;생각난 것이 임뿐이라"></textarea>
+        <button id="save-lyrics-btn" class="btn-primary">저장</button>
+      </div>
+
+      <!-- 싱크 안내 배너 -->
+      <div id="sync-banner" class="sync-banner" hidden>
+        <span>재생하면서 각 줄이 <b>시작되는 순간</b> 아래 줄을 탭하세요.</span>
+        <button id="sync-done" class="mini-btn">완료</button>
+      </div>
+
+      <!-- 사설 표시 -->
+      <ul id="lyrics-list" class="lyrics-list"></ul>
+    </div>
+
+    <!-- 타임스탬프 메모 -->
+    <div class="section">
+      <div class="section-head">
+        <h2>메모</h2>
+        <button id="add-memo-btn" class="mini-btn">＋ 지금 지점에 메모</button>
+      </div>
+      <ul id="memo-list" class="memo-list"></ul>
+    </div>
+
+    <audio id="audio" preload="metadata"></audio>
+  </section>
+
+  <!-- 토스트 -->
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

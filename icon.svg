@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#c1372b"/>
+  <!-- 소리북(북) 형상 -->
+  <ellipse cx="256" cy="256" rx="150" ry="120" fill="#f6f1e7"/>
+  <ellipse cx="256" cy="256" rx="150" ry="120" fill="none" stroke="#8f2820" stroke-width="10"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#b8893b" stroke-width="0"/>
+  <!-- 북 가죽 못(징) -->
+  <g fill="#b8893b">
+    <circle cx="256" cy="146" r="9"/>
+    <circle cx="256" cy="366" r="9"/>
+    <circle cx="126" cy="256" r="9"/>
+    <circle cx="386" cy="256" r="9"/>
+    <circle cx="166" cy="176" r="8"/>
+    <circle cx="346" cy="176" r="8"/>
+    <circle cx="166" cy="336" r="8"/>
+    <circle cx="346" cy="336" r="8"/>
+  </g>
+  <!-- 울림(소리) -->
+  <g fill="none" stroke="#c1372b" stroke-width="12" stroke-linecap="round">
+    <path d="M236 210 q-34 46 0 92"/>
+    <path d="M276 210 q34 46 0 92"/>
+  </g>
+</svg>

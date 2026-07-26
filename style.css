@@ -1,0 +1,267 @@
+:root {
+  --bg: #f6f1e7;          /* 한지 크림 */
+  --surface: #fffdf8;
+  --surface-2: #efe7d6;
+  --ink: #2a2320;         /* 먹 */
+  --ink-soft: #6b615a;
+  --accent: #c1372b;      /* 단청 주(朱) */
+  --accent-soft: #e6b8b2;
+  --gold: #b8893b;
+  --line: #e0d6c3;
+  --shadow: 0 2px 10px rgba(60, 44, 30, 0.10);
+  --radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1917;
+    --surface: #262220;
+    --surface-2: #322c28;
+    --ink: #f0e9df;
+    --ink-soft: #b0a498;
+    --accent: #e2564a;
+    --accent-soft: #5a2a26;
+    --gold: #d6a44f;
+    --line: #3a332e;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  }
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.view { display: none; min-height: 100vh; }
+.view.active { display: block; }
+
+/* ===== 목록 화면 ===== */
+.app-header {
+  text-align: center;
+  padding: 32px 20px 20px;
+  padding-top: calc(32px + env(safe-area-inset-top));
+}
+.logo {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+.tagline { margin: 6px 0 0; color: var(--ink-soft); font-size: 14px; }
+
+.library-actions { padding: 0 20px; }
+
+.btn-primary {
+  width: 100%;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 15px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.btn-primary:active { transform: scale(0.98); }
+
+.track-list { list-style: none; margin: 20px 0 0; padding: 0 16px; }
+.track-item {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.track-item:active { transform: scale(0.99); }
+.track-thumb {
+  width: 44px; height: 44px; flex: none;
+  border-radius: 12px;
+  background: var(--surface-2);
+  display: grid; place-items: center;
+  font-size: 22px;
+}
+.track-info { flex: 1; min-width: 0; }
+.track-name {
+  font-weight: 700; font-size: 16px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.track-meta { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+
+.empty-state { text-align: center; color: var(--ink-soft); padding: 60px 30px; }
+.empty-state[hidden] { display: none; }
+.empty-icon { font-size: 44px; margin-bottom: 12px; }
+
+/* ===== 연습 화면 ===== */
+.player-header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 12px;
+  padding-top: calc(12px + env(safe-area-inset-top));
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.icon-btn {
+  border: none; background: transparent; color: var(--ink);
+  font-size: 16px; padding: 8px 10px; cursor: pointer; border-radius: 10px;
+}
+.icon-btn.danger { color: var(--accent); }
+.icon-btn:active { background: var(--surface-2); }
+.track-title {
+  flex: 1; min-width: 0;
+  border: none; background: transparent;
+  font-size: 17px; font-weight: 700; color: var(--ink);
+  text-align: center; padding: 8px;
+}
+.track-title:focus { outline: none; background: var(--surface); border-radius: 8px; }
+
+.player-panel {
+  background: var(--surface);
+  margin: 16px; padding: 18px;
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+}
+
+.seek { width: 100%; margin: 0; accent-color: var(--accent); }
+.time-row {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--ink-soft); margin-top: 4px;
+}
+
+.transport {
+  display: flex; align-items: center; justify-content: center;
+  gap: 20px; margin: 16px 0 8px;
+}
+.round-btn {
+  border: 1px solid var(--line); background: var(--surface-2);
+  color: var(--ink); font-size: 14px; font-weight: 700;
+  min-width: 56px; height: 48px; border-radius: 24px; cursor: pointer;
+}
+.round-btn.big {
+  width: 68px; height: 68px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-size: 24px; border: none;
+  box-shadow: var(--shadow);
+}
+.round-btn:active { transform: scale(0.95); }
+
+.row-label { font-size: 12px; color: var(--ink-soft); display: block; margin: 14px 0 8px; }
+
+.speed-buttons, .ab-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.speed-buttons button {
+  flex: 1; min-width: 52px;
+  border: 1px solid var(--line); background: var(--surface-2);
+  color: var(--ink); padding: 10px 6px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.speed-buttons button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.ab-btn {
+  border: 1px solid var(--line); background: var(--surface-2);
+  color: var(--ink); padding: 10px 12px; border-radius: 10px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.ab-btn em { font-style: normal; color: var(--accent); font-weight: 700; margin-left: 4px; }
+.ab-btn.toggle.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.ab-btn.toggle.active em { color: #fff; }
+.ab-btn.ghost { background: transparent; color: var(--ink-soft); }
+
+/* ===== 섹션 (사설/메모) ===== */
+.section { margin: 0 16px 20px; }
+.section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.section-head h2 { margin: 0; font-size: 16px; }
+.section-tools { display: flex; gap: 6px; }
+
+.mini-btn {
+  border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  font-size: 13px; font-weight: 600; padding: 7px 11px;
+  border-radius: 9px; cursor: pointer;
+}
+.mini-btn.ghost { background: transparent; color: var(--accent); }
+.mini-btn:active { transform: scale(0.96); }
+
+.lyrics-editor textarea {
+  width: 100%; min-height: 130px; resize: vertical;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--surface); color: var(--ink);
+  padding: 12px; font-size: 15px; line-height: 1.7; font-family: inherit;
+  margin-bottom: 10px;
+}
+.lyrics-editor textarea:focus { outline: none; border-color: var(--accent); }
+
+.sync-banner {
+  background: var(--accent-soft); color: var(--ink);
+  border-radius: 12px; padding: 12px 14px; margin-bottom: 12px;
+  font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+
+.lyrics-list { list-style: none; margin: 0; padding: 0; }
+.lyrics-line {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 11px 12px; border-radius: 10px;
+  font-size: 16px; line-height: 1.6; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  color: var(--ink-soft);
+}
+.lyrics-line .line-text { flex: 1; }
+.lyrics-line .line-stamp {
+  font-size: 11px; color: var(--gold); font-variant-numeric: tabular-nums;
+  padding-top: 4px; flex: none;
+}
+.lyrics-line .line-loop {
+  border: none; background: transparent; cursor: pointer;
+  font-size: 15px; opacity: 0.5; padding: 0 2px;
+}
+.lyrics-line.has-time { color: var(--ink); }
+.lyrics-line.current {
+  background: var(--accent); color: #fff; font-weight: 700;
+}
+.lyrics-line.current .line-stamp,
+.lyrics-line.current .line-loop { color: #fff; opacity: 0.9; }
+.lyrics-line.sync-next {
+  background: var(--accent-soft); font-weight: 700; color: var(--ink);
+}
+
+.memo-list { list-style: none; margin: 0; padding: 0; }
+.memo-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 12px; margin-bottom: 8px;
+}
+.memo-time {
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  font-variant-numeric: tabular-nums; flex: none;
+  background: var(--accent-soft); padding: 3px 8px; border-radius: 8px;
+  cursor: pointer;
+}
+.memo-text { flex: 1; font-size: 14px; }
+.memo-del { border: none; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: 15px; }
+.memo-empty { color: var(--ink-soft); font-size: 13px; padding: 4px 2px; }
+
+/* ===== 토스트 ===== */
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  background: var(--ink); color: var(--bg);
+  padding: 11px 18px; border-radius: 24px; font-size: 14px;
+  box-shadow: var(--shadow); z-index: 100; max-width: 90%;
+}
+.toast[hidden] { display: none; }
+
+[hidden] { display: none !important; }

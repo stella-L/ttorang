@@ -1,0 +1,20 @@
+{
+  "name": "또랑또랑 · 판소리 연습장",
+  "short_name": "또랑또랑",
+  "description": "선생님 소리를 그대로 숙지하는 판소리 연습 도구. 구간 반복, 배속, 사설 싱크, 타임스탬프 메모.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f1e7",
+  "theme_color": "#c1372b",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
