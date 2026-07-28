@@ -158,6 +158,17 @@ body {
 }
 .round-btn:active { transform: scale(0.95); }
 
+.repeat-all-row { display: flex; justify-content: center; margin-top: 14px; }
+.repeat-all-btn {
+  border: 1px solid var(--line); background: var(--surface-2);
+  color: var(--ink-soft); font-size: 14px; font-weight: 600;
+  padding: 9px 18px; border-radius: 22px; cursor: pointer;
+}
+.repeat-all-btn.active {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.repeat-all-btn:active { transform: scale(0.97); }
+
 .row-label { font-size: 12px; color: var(--ink-soft); display: block; margin: 14px 0 8px; }
 
 .speed-buttons, .ab-buttons { display: flex; gap: 8px; flex-wrap: wrap; }

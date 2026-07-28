@@ -184,6 +184,7 @@
     setActiveSpeed(1);
 
     $('#track-title').value = current.title;
+    renderRepeatAll();
     renderAB();
     renderLyrics();
     renderMemos();
@@ -250,6 +251,21 @@
     audio.playbackRate = rate;
     audio.preservesPitch = true; // 음정 유지
     setActiveSpeed(rate);
+  });
+
+  /* ========== 전체 반복 (한 곡 무한 반복) ========== */
+  const repeatAllBtn = $('#repeat-all');
+  function renderRepeatAll() {
+    const on = !!current.repeatAll;
+    audio.loop = on;
+    repeatAllBtn.classList.toggle('active', on);
+    repeatAllBtn.setAttribute('aria-pressed', String(on));
+  }
+  repeatAllBtn.addEventListener('click', () => {
+    current.repeatAll = !current.repeatAll;
+    renderRepeatAll();
+    persist();
+    toast(current.repeatAll ? '전체 반복 켜짐' : '전체 반복 꺼짐');
   });
 
   /* ========== A-B 구간 반복 ========== */
