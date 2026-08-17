@@ -96,6 +96,7 @@
   let objectUrl = null;    // 현재 오디오 objectURL
   let syncMode = false;    // 가사 탭싱크 모드
   let syncIndex = 0;       // 싱크로 찍을 다음 줄 index
+  let adjustMode = false;  // 찍어둔 사설 시간 미세조정 모드
 
   /* ========== 화면 전환 ========== */
   function showLibrary() {
@@ -189,6 +190,7 @@
     renderLyrics();
     renderMemos();
     syncMode = false;
+    adjustMode = false;
     $('#sync-banner').hidden = true;
 
     showPlayer();
@@ -330,10 +332,18 @@
   });
 
   $('#edit-lyrics-btn').addEventListener('click', () => {
+    adjustMode = false;
     $('#lyrics-input').value = current.lyrics.map((l) => l.text).join('\n');
     $('#lyrics-editor').hidden = false;
     $('#lyrics-list').hidden = true;
     $('#lyrics-tools').hidden = true;
+  });
+
+  $('#adjust-sync-btn').addEventListener('click', () => {
+    if (syncMode) return;
+    adjustMode = !adjustMode;
+    renderLyrics();
+    toast(adjustMode ? '줄별 시간을 조정하세요' : '시간 조정 완료');
   });
 
   function renderLyrics() {
@@ -343,26 +353,35 @@
     $('#lyrics-editor').hidden = hasLyrics;
     $('#lyrics-list').hidden = !hasLyrics;
     $('#lyrics-tools').hidden = !hasLyrics;
+    $('#adjust-sync-btn').classList.toggle('active', adjustMode);
+    $('#adjust-sync-btn').textContent = adjustMode ? '완료' : '시간 조정';
     if (!hasLyrics) { list.innerHTML = ''; return; }
 
     list.innerHTML = '';
     current.lyrics.forEach((line, i) => {
       const li = document.createElement('li');
-      li.className = 'lyrics-line' + (line.time != null ? ' has-time' : '');
+      li.className = 'lyrics-line' + (line.time != null ? ' has-time' : '') + (adjustMode ? ' adjusting' : '');
       li.dataset.index = i;
 
       const stamp = document.createElement('span');
       stamp.className = 'line-stamp';
       stamp.textContent = line.time != null ? fmt(line.time) : '';
 
-      const text = document.createElement('span');
+      const text = adjustMode ? createLineTextInput(line, i) : document.createElement('span');
       text.className = 'line-text';
-      text.textContent = line.text;
+      if (!adjustMode) text.textContent = line.text;
 
       li.appendChild(stamp);
       li.appendChild(text);
 
-      if (line.time != null) {
+      if (adjustMode) {
+        const controls = document.createElement('div');
+        controls.className = 'line-adjust';
+        controls.appendChild(adjustButton('-0.5', () => nudgeLineTime(i, -0.5)));
+        controls.appendChild(adjustButton('지금', () => setLineTime(i, audio.currentTime)));
+        controls.appendChild(adjustButton('+0.5', () => nudgeLineTime(i, 0.5)));
+        li.appendChild(controls);
+      } else if (line.time != null) {
         const loop = document.createElement('button');
         loop.className = 'line-loop';
         loop.textContent = '🔁';
@@ -374,6 +393,87 @@
       li.addEventListener('click', () => onLineClick(i));
       list.appendChild(li);
     });
+  }
+
+  function createLineTextInput(line, index) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = `lyric-text-${index}`;
+    input.name = `lyric-text-${index}`;
+    input.value = line.text;
+    input.setAttribute('aria-label', `${index + 1}번째 사설`);
+    input.addEventListener('click', (e) => e.stopPropagation());
+    input.addEventListener('change', () => updateLineText(index, input.value));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        input.blur();
+      } else if (e.key === 'Escape') {
+        input.value = current.lyrics[index].text;
+        input.blur();
+      }
+    });
+    return input;
+  }
+
+  function updateLineText(index, value) {
+    const text = value.trim();
+    if (!text) {
+      renderLyrics();
+      toast('사설은 비워둘 수 없어요');
+      return;
+    }
+    current.lyrics[index].text = text;
+    persist();
+    toast('사설 수정 완료');
+  }
+
+  function adjustButton(label, action) {
+    const btn = document.createElement('button');
+    btn.className = 'adjust-btn';
+    btn.type = 'button';
+    btn.textContent = label;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      action();
+    });
+    return btn;
+  }
+
+  function setLineTime(i, time) {
+    const duration = audio.duration || current.duration || Infinity;
+    current.lyrics[i].time = Math.max(0, Math.min(duration, time));
+    normalizeLyricTimes();
+    persist();
+    renderLyrics();
+  }
+
+  function nudgeLineTime(i, delta) {
+    const base = current.lyrics[i].time != null ? current.lyrics[i].time : audio.currentTime;
+    setLineTime(i, base + delta);
+  }
+
+  function normalizeLyricTimes() {
+    current.lyrics.forEach((line, i) => {
+      if (line.time == null) return;
+      const prev = findPrevLyricTime(i);
+      const next = findNextLyricTime(i);
+      if (prev != null && line.time <= prev) line.time = prev + 0.1;
+      if (next != null && line.time >= next) line.time = Math.max(0, next - 0.1);
+    });
+  }
+
+  function findPrevLyricTime(index) {
+    for (let i = index - 1; i >= 0; i--) {
+      if (current.lyrics[i].time != null) return current.lyrics[i].time;
+    }
+    return null;
+  }
+
+  function findNextLyricTime(index) {
+    for (let i = index + 1; i < current.lyrics.length; i++) {
+      if (current.lyrics[i].time != null) return current.lyrics[i].time;
+    }
+    return null;
   }
 
   function onLineClick(i) {
@@ -396,9 +496,11 @@
   // 싱크 모드
   $('#sync-btn').addEventListener('click', () => {
     syncMode = true;
+    adjustMode = false;
     syncIndex = 0;
     $('#sync-banner').hidden = false;
     $('#lyrics-tools').hidden = true;
+    renderLyrics();
     markSyncNext();
     audio.currentTime = 0;
     audio.play();
@@ -410,7 +512,8 @@
     $('#lyrics-tools').hidden = false;
     document.querySelectorAll('.lyrics-line.sync-next').forEach((el) => el.classList.remove('sync-next'));
     persist();
-    toast('싱크 완료');
+    renderLyrics();
+    toast('싱크 완료. 어긋난 줄은 시간 조정에서 다듬으세요');
   });
   function markSyncNext() {
     document.querySelectorAll('.lyrics-line.sync-next').forEach((el) => el.classList.remove('sync-next'));

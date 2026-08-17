@@ -118,6 +118,7 @@ body {
 .icon-btn {
   border: none; background: transparent; color: var(--ink);
   font-size: 16px; padding: 8px 10px; cursor: pointer; border-radius: 10px;
+  min-height: 44px;
 }
 .icon-btn.danger { color: var(--accent); }
 .icon-btn:active { background: var(--surface-2); }
@@ -163,6 +164,7 @@ body {
   border: 1px solid var(--line); background: var(--surface-2);
   color: var(--ink-soft); font-size: 14px; font-weight: 600;
   padding: 9px 18px; border-radius: 22px; cursor: pointer;
+  min-height: 44px;
 }
 .repeat-all-btn.active {
   background: var(--accent); color: #fff; border-color: var(--accent);
@@ -177,6 +179,7 @@ body {
   border: 1px solid var(--line); background: var(--surface-2);
   color: var(--ink); padding: 10px 6px; border-radius: 10px;
   font-size: 14px; font-weight: 600; cursor: pointer;
+  min-height: 44px;
 }
 .speed-buttons button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
@@ -184,6 +187,7 @@ body {
   border: 1px solid var(--line); background: var(--surface-2);
   color: var(--ink); padding: 10px 12px; border-radius: 10px;
   font-size: 13px; font-weight: 600; cursor: pointer;
+  min-height: 44px;
 }
 .ab-btn em { font-style: normal; color: var(--accent); font-weight: 700; margin-left: 4px; }
 .ab-btn.toggle.active { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -202,9 +206,11 @@ body {
 .mini-btn {
   border: 1px solid var(--accent); background: var(--accent); color: #fff;
   font-size: 13px; font-weight: 600; padding: 7px 11px;
+  min-height: 44px;
   border-radius: 9px; cursor: pointer;
 }
 .mini-btn.ghost { background: transparent; color: var(--accent); }
+.mini-btn.active { background: var(--accent); color: #fff; }
 .mini-btn:active { transform: scale(0.96); }
 
 .lyrics-editor textarea {
@@ -230,14 +236,27 @@ body {
   transition: background 0.15s, color 0.15s;
   color: var(--ink-soft);
 }
-.lyrics-line .line-text { flex: 1; }
+.lyrics-line .line-text { flex: 1; min-width: 0; }
+input.line-text {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font: inherit;
+  padding: 7px 9px;
+  min-height: 44px;
+}
+input.line-text:focus { outline: none; border-color: var(--accent); background: var(--surface); }
 .lyrics-line .line-stamp {
   font-size: 11px; color: var(--gold); font-variant-numeric: tabular-nums;
   padding-top: 4px; flex: none;
+  min-width: 34px;
 }
 .lyrics-line .line-loop {
   border: none; background: transparent; cursor: pointer;
-  font-size: 15px; opacity: 0.5; padding: 0 2px;
+  font-size: 15px; opacity: 0.5; padding: 0;
+  width: 44px; min-height: 44px;
 }
 .lyrics-line.has-time { color: var(--ink); }
 .lyrics-line.current {
@@ -248,6 +267,31 @@ body {
 .lyrics-line.sync-next {
   background: var(--accent-soft); font-weight: 700; color: var(--ink);
 }
+.lyrics-line.adjusting {
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.line-adjust {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(54px, 1fr));
+  gap: 6px;
+  flex: 0 0 100%;
+  padding-left: 44px;
+}
+.adjust-btn {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink);
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.adjust-btn:active { transform: scale(0.97); }
 
 .memo-list { list-style: none; margin: 0; padding: 0; }
 .memo-item {
@@ -262,7 +306,11 @@ body {
   cursor: pointer;
 }
 .memo-text { flex: 1; font-size: 14px; }
-.memo-del { border: none; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: 15px; }
+.memo-del {
+  border: none; background: transparent; color: var(--ink-soft);
+  cursor: pointer; font-size: 15px;
+  width: 44px; min-height: 44px;
+}
 .memo-empty { color: var(--ink-soft); font-size: 13px; padding: 4px 2px; }
 
 /* ===== 토스트 ===== */
