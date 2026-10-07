@@ -1,5 +1,9 @@
 # 내부 기획 문서 (비공개)
 기획_판소리연습앱.md
+
+# 민감 설정 (PIN 등) — GitHub Actions가 Secrets에서 생성
+config.js
+
 # 테스트/임시 파일
 _test*.wav
 _test*.qta

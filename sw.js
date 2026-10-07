@@ -1,10 +1,11 @@
 /* 또랑또랑 서비스워커 — 앱 껍데기 오프라인 캐시 (오디오는 IndexedDB에 별도 저장) */
-const CACHE = 'ttorang-v5';
+const CACHE = 'ttorang-v8';
 const ASSETS = [
   './',
   './index.html',
   './style.css',
   './app.js',
+  './config.js',
   './manifest.json',
   './icon.svg',
 ];

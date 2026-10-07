@@ -29,6 +29,58 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+/* ===== PIN 잠금 화면 ===== */
+.pin-gate {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.pin-gate[hidden] { display: none; }
+.pin-card {
+  width: 100%; max-width: 320px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.pin-logo {
+  margin: 0 0 6px; font-size: 28px; font-weight: 800;
+  letter-spacing: 2px; color: var(--accent);
+}
+.pin-tagline { margin: 0 0 20px; color: var(--ink-soft); font-size: 13px; }
+#pin-input {
+  width: 100%; margin-bottom: 14px;
+  padding: 14px; font-size: 22px;
+  text-align: center; letter-spacing: 8px;
+  background: var(--surface-2); border: 1px solid var(--line);
+  color: var(--ink); border-radius: 10px;
+  font-family: inherit;
+}
+#pin-input:focus { outline: none; border-color: var(--accent); }
+.pin-error {
+  margin: 12px 0 0; color: var(--accent);
+  font-size: 13px; font-weight: 600;
+}
+
+/* ===== 동기화·마이그레이션 ===== */
+.migrate-btn { margin-top: 10px; width: 100%; }
+.sync-status {
+  margin-top: 10px; padding: 10px 12px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 10px; font-size: 13px; color: var(--ink-soft);
+}
+.sync-status .sync-progress {
+  display: block; margin-top: 6px;
+  height: 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden;
+}
+.sync-status .sync-progress-bar {
+  display: block; height: 100%; background: var(--accent); width: 0%;
+  transition: width 0.2s;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
@@ -312,6 +364,101 @@ input.line-text:focus { outline: none; border-color: var(--accent); background: 
   width: 44px; min-height: 44px;
 }
 .memo-empty { color: var(--ink-soft); font-size: 13px; padding: 4px 2px; }
+
+/* ===== 가사 분석 섹션 ===== */
+#analysis-section .section-head h2 { color: var(--accent); }
+
+#analysis-input-panel textarea {
+  width: 100%; min-height: 110px; resize: vertical;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--surface); color: var(--ink);
+  padding: 12px; font-size: 15px; line-height: 1.7; font-family: inherit;
+  margin-bottom: 12px;
+}
+#analysis-input-panel textarea:focus { outline: none; border-color: var(--accent); }
+
+.segment-controls {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+.segment-controls .row-label { margin: 0 0 8px; }
+.segment-controls label {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-right: 12px; cursor: pointer;
+  min-height: 32px;
+}
+.segment-controls label input[type="radio"] { accent-color: var(--accent); }
+.segment-custom {
+  margin-top: 8px; display: flex; align-items: center; gap: 6px;
+}
+.segment-custom input {
+  flex: 1; min-height: 40px;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 6px 10px; font-size: 13px; font-family: inherit;
+  background: var(--surface-2); color: var(--ink);
+}
+.segment-custom input:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+
+.analysis-loading {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 12px;
+  color: var(--ink-soft); font-size: 14px;
+}
+.analysis-loading .spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--accent-soft); border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.analysis-results {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; padding: 14px 14px; margin-top: 4px;
+}
+.analysis-results .result-line {
+  padding: 10px 2px 12px; border-bottom: 1px dashed var(--line);
+}
+.analysis-results .result-line:last-child { border-bottom: none; padding-bottom: 4px; }
+
+.result-text {
+  font-size: 17px; line-height: 1.9; color: var(--ink);
+  word-break: keep-all;
+}
+.result-text .syl { display: inline; }
+.result-text .syl-accent {
+  color: var(--accent);
+  font-weight: 800;
+}
+.result-text .syl-duration {
+  display: inline-block;
+  margin: 0 4px 0 2px;
+  padding: 0 5px;
+  font-size: 10px;
+  color: var(--ink-soft);
+  background: var(--surface-2);
+  border-radius: 8px;
+  vertical-align: middle;
+  opacity: 0.9;
+  letter-spacing: 0;
+}
+.result-hints {
+  margin-top: 6px; font-size: 12px;
+  color: var(--ink-soft); line-height: 1.5;
+}
+.result-hints .hint-arrow { color: var(--gold); margin-right: 4px; font-weight: 700; }
+.result-hints .hint-item {
+  display: inline-block; margin-right: 10px;
+}
+.result-hints .hint-item + .hint-item::before {
+  content: '·';
+  margin-right: 8px;
+  opacity: 0.6;
+}
 
 /* ===== 토스트 ===== */
 .toast {

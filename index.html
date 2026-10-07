@@ -12,8 +12,22 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="또랑또랑" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+  <script src="config.js"></script>
 </head>
 <body>
+
+  <!-- ===== PIN 잠금 화면 ===== -->
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-card">
+      <h1 class="pin-logo">또랑또랑</h1>
+      <p class="pin-tagline">PIN을 입력하세요</p>
+      <input id="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off" />
+      <button id="pin-submit" class="btn-primary">열기</button>
+      <p id="pin-error" class="pin-error" hidden>PIN이 틀렸어요</p>
+    </div>
+  </div>
 
   <!-- ===== 목록 화면 ===== -->
   <section id="library-view" class="view active">
@@ -25,6 +39,8 @@
     <div class="library-actions">
       <button id="import-btn" class="btn-primary">＋ 녹음 파일 불러오기</button>
       <input type="file" id="file-input" accept="audio/*,video/*,.qta,.m4a,.mov,.caf" hidden />
+      <button id="migrate-btn" class="mini-btn ghost migrate-btn" hidden>⬆︎ 기존 로컬 데이터 Supabase로 올리기</button>
+      <div id="sync-status" class="sync-status" hidden></div>
     </div>
 
     <ul id="track-list" class="track-list"></ul>
@@ -111,6 +127,42 @@
 
       <!-- 사설 표시 -->
       <ul id="lyrics-list" class="lyrics-list"></ul>
+    </div>
+
+    <!-- 가사 분석 (독립 섹션) -->
+    <div class="section" id="analysis-section">
+      <div class="section-head">
+        <h2>🎼 가사 분석</h2>
+        <div class="section-tools" id="analysis-tools" hidden>
+          <button id="analysis-toggle-btn" class="mini-btn ghost" title="원문/분석 결과 전환">원문</button>
+          <button id="analysis-reset-btn" class="mini-btn ghost">초기화</button>
+        </div>
+      </div>
+
+      <div id="analysis-input-panel">
+        <textarea id="analysis-input" placeholder="분석할 가사 원문을 한 줄씩 붙여넣어 주세요.&#10;예)&#10;아버지 듣조시오&#10;또한 가련허니"></textarea>
+
+        <div class="segment-controls">
+          <span class="row-label">분석 구간</span>
+          <label><input type="radio" name="seg-mode" value="full" checked /> 전체</label>
+          <label><input type="radio" name="seg-mode" value="ab" /> A-B 구간</label>
+          <label><input type="radio" name="seg-mode" value="custom" /> 직접 입력</label>
+          <div class="segment-custom" id="segment-custom" hidden>
+            <input type="text" id="seg-start" placeholder="시작 mm:ss" />
+            <span>~</span>
+            <input type="text" id="seg-end" placeholder="끝 mm:ss" />
+          </div>
+        </div>
+
+        <button id="analyze-start-btn" class="btn-primary">분석 시작</button>
+      </div>
+
+      <div id="analysis-loading" class="analysis-loading" hidden>
+        <span class="spinner"></span>
+        <span id="analysis-loading-text">오디오 분석 중...</span>
+      </div>
+
+      <div id="analysis-results" class="analysis-results" hidden></div>
     </div>
 
     <!-- 타임스탬프 메모 -->
